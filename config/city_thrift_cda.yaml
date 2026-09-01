@@ -1,0 +1,130 @@
+# City Thrift — Coeur d'Alene, ID
+# 165 East Appleway Avenue, CDA, ID 83814
+# Phone: 208-268-8600
+
+store:
+  id: city-thrift-cda
+  name: City Thrift
+  address: 165 East Appleway Avenue
+  city: Coeur d'Alene
+  state: ID
+  zip: "83814"
+  phone: "208-268-8600"
+  email: cs@citythriftshops.com
+  hours:
+    mon_sat: "10:00-19:00"
+    sun: "11:00-19:00"
+  donation_dropoff:
+    location: back_entrance
+    hours_mon_sat: "10:00-18:00"
+    hours_sun: "11:00-18:00"
+
+zones:
+  - id: entrance_exit
+    name: Entrance / Exit
+    type: public
+    cameras: [cam-01, cam-02]
+    risk_level: high
+    customer_rules:
+      - exit_without_bag_check
+      - loitering_threshold_sec: 120
+    employee_rules:
+      - unauthorized_exit_with_merchandise
+
+  - id: sales_floor
+    name: Sales Floor
+    type: public
+    cameras: [cam-03, cam-04, cam-05]
+    risk_level: medium
+    customer_rules:
+      - concealment_detection
+      - high_value_area_dwell_sec: 180
+      - sweep_theft_pattern
+    employee_rules:
+      - merchandise_to_personal_bag
+
+  - id: checkout
+    name: Checkout / POS
+    type: restricted
+    cameras: [cam-06, cam-07]
+    risk_level: critical
+    pos_integrated: true
+    customer_rules:
+      - unpaid_item_exit_correlation
+    employee_rules:
+      - void_without_customer
+      - excessive_discount
+      - no_sale_drawer_open
+      - sweethearting_pattern
+      - manual_price_override
+
+  - id: donation_dropoff
+    name: Donation Drop-Off (Back)
+    type: semi_public
+    cameras: [cam-08]
+    risk_level: high
+    customer_rules:
+      - donation_area_pilferage
+      - after_hours_access
+    employee_rules:
+      - unsorted_donation_removal
+
+  - id: back_of_house
+    name: Back of House / Sorting
+    type: employee_only
+    cameras: [cam-09, cam-10]
+    risk_level: critical
+    customer_rules:
+      - unauthorized_entry
+    employee_rules:
+      - restricted_hours_access
+      - inventory_to_personal_area
+      - buddy_system_violation
+
+  - id: office_safe
+    name: Office / Cash Handling
+    type: employee_only
+    cameras: [cam-11]
+    risk_level: critical
+    employee_rules:
+      - solo_cash_count
+      - safe_access_outside_hours
+
+alert_tiers:
+  critical:
+    response: immediate_manager_and_lp
+    examples:
+      - employee_cash_drawer_anomaly
+      - customer_exit_unpaid_correlation
+      - unauthorized_boh_entry
+  high:
+    response: lp_review_within_5_min
+    examples:
+      - concealment_detected
+      - pos_void_spike
+      - donation_pilferage
+  medium:
+    response: daily_review
+    examples:
+      - loitering_high_value
+      - discount_pattern_anomaly
+  low:
+    response: weekly_trend_report
+    examples:
+      - foot_traffic_anomaly
+
+pos_integration:
+  enabled: true
+  provider: generic_retail_pos
+  correlation_window_sec: 3
+  exception_rules:
+    - void_rate_threshold_per_hour: 5
+    - discount_over_percent: 50
+    - refund_without_return
+    - no_sale_opens_per_shift: 3
+
+privacy:
+  face_recognition: false
+  behavior_only_detection: true
+  retention_days: 30
+  blur_bystanders_in_exports: true
