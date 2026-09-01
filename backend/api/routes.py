@@ -8,6 +8,7 @@ from backend.models import (
     Alert,
     AlertStatus,
     AlertTier,
+    ConnectionsStatus,
     DashboardStats,
     DetectionEvent,
     MonitorSide,
@@ -46,6 +47,11 @@ ws_manager = ConnectionManager()
 @router.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok", "store": "city-thrift-cda"}
+
+
+@router.get("/connections", response_model=ConnectionsStatus)
+def get_connections() -> ConnectionsStatus:
+    return store.get_connections()
 
 
 @router.get("/store", response_model=StoreInfo)

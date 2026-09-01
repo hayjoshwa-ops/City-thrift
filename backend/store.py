@@ -10,8 +10,10 @@ from backend.models import (
     Alert,
     AlertStatus,
     AlertTier,
+    ConnectionsStatus,
     DashboardStats,
     DetectionEvent,
+    IntegrationStatus,
     MonitorSide,
     POSTransaction,
     StoreInfo,
@@ -19,6 +21,7 @@ from backend.models import (
 )
 
 CONFIG_PATH = Path(__file__).resolve().parents[1] / "config" / "city_thrift_cda.yaml"
+CONNECTIONS_PATH = Path(__file__).resolve().parents[1] / "config" / "connections.yaml"
 INTAKE_ZONE_IDS = {"receiving_dock", "product_onboarding"}
 
 
@@ -126,6 +129,41 @@ class EventStore:
             ),
             zones_monitored=len(self.get_zones()),
             cameras_online=sum(len(z.cameras) for z in self.get_zones()),
+        )
+
+    def get_connections(self) -> ConnectionsStatus:
+        with open(CONNECTIONS_PATH) as f:
+            cfg = yaml.safe_load(f)
+
+        integrations = []
+        all_connected = True
+        for key, data in cfg.get("integrations", {}).items():
+            status = data.get("status", "pending")
+            if status != "connected":
+                all_connected = False
+            integrations.append(
+                IntegrationStatus(
+                    name=key,
+                    status=status,
+                    notes=data.get("notes"),
+                    details={k: v for k, v in data.items() if k not in ("status", "notes")},
+                )
+            )
+
+        mode = cfg.get("mode", "demo")
+        if mode == "demo" or not all_connected:
+            message = (
+                "Demo mode — no cameras or POS connected yet. "
+                "Use demo_simulator.py to preview alerts. See docs/BEFORE_YOU_CONNECT.md."
+            )
+        else:
+            message = "Live mode — integrations connected."
+
+        return ConnectionsStatus(
+            mode=mode,
+            ready_for_live=all_connected and mode == "live",
+            message=message,
+            integrations=integrations,
         )
 
     def correlate_pos_with_event(

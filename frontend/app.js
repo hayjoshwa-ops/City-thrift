@@ -16,6 +16,23 @@ async function loadStore() {
   document.title = `${store.name} — Loss Prevention`;
 }
 
+async function loadConnections() {
+  const conn = await fetchJSON("/connections");
+  const banner = document.getElementById("demo-banner");
+  const status = document.getElementById("connection-status");
+
+  if (conn.mode === "demo" || !conn.ready_for_live) {
+    banner.classList.remove("hidden");
+    status.textContent = "Demo";
+    status.className = "badge badge-demo";
+    status.title = conn.message;
+  } else {
+    banner.classList.add("hidden");
+    status.textContent = "Live";
+    status.className = "badge badge-ok";
+  }
+}
+
 const INTAKE_ZONES = new Set(["receiving_dock", "product_onboarding"]);
 
 async function loadStats() {
@@ -164,6 +181,7 @@ document.querySelectorAll(".filter-btn").forEach((btn) => {
 async function init() {
   try {
     await loadStore();
+    await loadConnections();
     await loadZones();
     await refresh();
     connectWebSocket();

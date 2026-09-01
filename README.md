@@ -1,6 +1,32 @@
 # City Thrift — AI Loss Prevention Monitoring
 
-AI-integrated security monitoring for **loss prevention** at **City Thrift**, 165 East Appleway Avenue, Coeur d'Alene (CDA), ID. Covers both **customer-side** and **employee-side** threats through behavior-based video analytics and POS correlation.
+AI-integrated security monitoring for **loss prevention** at **City Thrift**, 165 East Appleway Avenue, Coeur d'Alene (CDA), ID.
+
+> **Can't connect cameras or POS yet?** That's fine. The system runs in **demo mode** with no hardware required. See [docs/BEFORE_YOU_CONNECT.md](docs/BEFORE_YOU_CONNECT.md).
+
+## What works without any connections
+
+- LP dashboard preview (customer, employee, intake/dock alerts)
+- Zone and rule configuration for your CDA store
+- Manager training with simulated alerts
+- Connection checklist for when you are ready to go live
+
+## Quick start (demo mode)
+
+```bash
+pip install -r requirements.txt
+python3 -m uvicorn backend.main:app --host 0.0.0.0 --port 8000
+```
+
+Open **http://127.0.0.1:8000** on the same computer.
+
+Seed sample alerts:
+
+```bash
+python3 scripts/demo_simulator.py
+```
+
+Check integration status: **GET /api/connections** (shows `mode: demo` until cameras/POS are linked).
 
 ## What this system monitors
 
@@ -47,6 +73,8 @@ python scripts/demo_simulator.py
 | Path | Purpose |
 |------|---------|
 | `config/city_thrift_cda.yaml` | Store zones, cameras, alert rules for CDA location |
+| `config/connections.yaml` | Camera/POS connection status (demo until you connect) |
+| `docs/BEFORE_YOU_CONNECT.md` | **Start here if you can't connect yet** |
 | `docs/ARCHITECTURE.md` | System design and deployment phases |
 | `backend/` | FastAPI REST + WebSocket API |
 | `ai_engine/` | Customer & employee detection pipeline |

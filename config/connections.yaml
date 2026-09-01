@@ -1,0 +1,52 @@
+# Connection status for City Thrift CDA
+# Set status to "connected" when each integration is live.
+# Until then, the system runs in demo mode with simulated alerts.
+
+mode: demo  # demo | live
+
+integrations:
+  cameras:
+    status: pending          # pending | connected | partial
+    protocol: null           # rtsp | onvif | milestone | axis
+    nvr_url: null
+    notes: "No camera feeds connected yet. Use demo_simulator.py to preview alerts."
+    zones_pending:
+      - entrance_exit
+      - sales_floor
+      - checkout
+      - donation_dropoff
+      - back_of_house
+      - receiving_dock
+      - product_onboarding
+      - office_safe
+
+  pos:
+    status: pending          # pending | connected
+    provider: null           # e.g. square, clover, lightspeed
+    webhook_url: null
+    notes: "POS not linked. Checkout correlation will activate when connected."
+
+  edge_box:
+    status: pending          # pending | connected
+    notes: "On-site AI edge device not deployed yet."
+
+  notifications:
+    status: pending          # pending | connected
+    sms: false
+    email: false
+    notes: "Manager alerts via SMS/email not configured yet."
+
+when_ready:
+  cameras:
+    - "Get RTSP or ONVIF URLs from your NVR or camera vendor"
+    - "Map each camera ID (cam-01 … cam-15) to a real feed in config"
+    - "Confirm rear dock and back room sort tables have coverage"
+  pos:
+    - "Identify your register/POS vendor"
+    - "Enable transaction webhook or export to /api/pos/transactions"
+  network:
+    - "Edge box on same LAN as cameras and NVR"
+    - "Outbound internet optional (alerts can stay on-site)"
+  policy:
+    - "Post employee monitoring notice per Idaho/store policy"
+    - "Define manager approval process for employee purchases from intake"

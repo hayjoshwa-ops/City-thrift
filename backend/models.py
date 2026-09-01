@@ -86,6 +86,20 @@ class DashboardStats(BaseModel):
     cameras_online: int
 
 
+class IntegrationStatus(BaseModel):
+    name: str
+    status: str
+    notes: str | None = None
+    details: dict[str, object] = Field(default_factory=dict)
+
+
+class ConnectionsStatus(BaseModel):
+    mode: str
+    ready_for_live: bool
+    message: str
+    integrations: list[IntegrationStatus]
+
+
 class POSTransaction(BaseModel):
     id: str
     timestamp: datetime

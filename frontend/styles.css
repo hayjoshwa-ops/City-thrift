@@ -48,6 +48,17 @@ body {
 }
 .badge-ok { background: rgba(107, 203, 119, 0.2); color: var(--low); }
 .badge-off { background: rgba(255, 77, 106, 0.2); color: var(--critical); }
+.badge-demo { background: rgba(255, 209, 102, 0.2); color: var(--medium); }
+
+.demo-banner {
+  background: rgba(255, 209, 102, 0.12);
+  border-bottom: 1px solid rgba(255, 209, 102, 0.35);
+  color: var(--medium);
+  padding: 0.75rem 2rem;
+  font-size: 0.88rem;
+}
+.demo-banner.hidden { display: none; }
+.demo-banner code { color: var(--text); font-size: 0.82rem; }
 
 .layout { padding: 1.5rem 2rem 2rem; max-width: 1400px; margin: 0 auto; }
 
