@@ -151,6 +151,8 @@ def _tier_for_rule(rule_id: str) -> AlertTier:
         "unauthorized_boh_entry",
         "solo_cash_count",
         "donation_area_pilferage",
+        "dock_to_personal_bag",
+        "high_value_intake_diversion",
     }
     high = {
         "concealment_detection",
@@ -158,6 +160,11 @@ def _tier_for_rule(rule_id: str) -> AlertTier:
         "excessive_discount",
         "inventory_to_personal_area",
         "unsorted_donation_removal",
+        "personal_item_selection",
+        "intake_to_personal_hold",
+        "unlogged_intake_removal",
+        "extended_personal_browsing",
+        "onboarding_bypass_sort",
     }
     medium = {
         "loitering_threshold",
@@ -188,5 +195,12 @@ def _title_for_event(event: DetectionEvent) -> str:
         "inventory_to_personal_area": "Merchandise moved toward personal area",
         "solo_cash_count": "Solo cash handling violation",
         "loitering_threshold": "Extended loitering in monitored zone",
+        "personal_item_selection": "Employee kept intake item for personal use",
+        "intake_to_personal_hold": "Intake item moved to personal hold area",
+        "unlogged_intake_removal": "Product removed from dock without intake log",
+        "extended_personal_browsing": "Employee browsing intake items for personal keep",
+        "dock_to_personal_bag": "Item diverted from dock to personal bag",
+        "onboarding_bypass_sort": "Intake item bypassed store sort path",
+        "high_value_intake_diversion": "High-value intake item diverted from inventory",
     }
     return titles.get(event.rule_id, event.rule_name)

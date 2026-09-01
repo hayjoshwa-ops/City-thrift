@@ -11,6 +11,7 @@ import yaml
 from ai_engine.base import FrameContext, results_to_events
 from ai_engine.detectors.customer import CustomerLossPreventionDetector
 from ai_engine.detectors.employee import EmployeeLossPreventionDetector
+from ai_engine.detectors.onboarding import OnboardingIntakeDetector
 
 CONFIG_PATH = Path(__file__).resolve().parents[1] / "config" / "city_thrift_cda.yaml"
 
@@ -21,6 +22,7 @@ class LossPreventionPipeline:
             self.config = yaml.safe_load(f)
         self.customer_detector = CustomerLossPreventionDetector()
         self.employee_detector = EmployeeLossPreventionDetector()
+        self.onboarding_detector = OnboardingIntakeDetector()
         self._zone_map = {z["id"]: z for z in self.config["zones"]}
 
     def process_frame(
@@ -47,6 +49,8 @@ class LossPreventionPipeline:
             results.extend(self.customer_detector.analyze(frame))
         if zone.get("employee_rules"):
             results.extend(self.employee_detector.analyze(frame))
+        if zone.get("onboarding_rules"):
+            results.extend(self.onboarding_detector.analyze(frame))
 
         return results_to_events(results, frame)
 

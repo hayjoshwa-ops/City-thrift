@@ -49,13 +49,28 @@ def run_simulation(*, bursts: int = 8, interval: float = 1.5) -> None:
 
         seed_pos_transactions(client)
 
+        intake_cameras = [
+            c for c in cameras if c["zone_id"] in ("receiving_dock", "product_onboarding")
+        ]
+        floor_cameras = [c for c in cameras if c not in intake_cameras]
+
         for i in range(bursts):
-            cam = random.choice(cameras)
+            # Bias toward intake zones ~40% to demo dock/onboarding alerts
+            cam = (
+                random.choice(intake_cameras)
+                if intake_cameras and random.random() < 0.4
+                else random.choice(floor_cameras or cameras)
+            )
             events = pipeline.process_frame(
                 cam["camera_id"],
                 metadata={
                     "employee_id": f"EMP-{random.randint(101, 105)}",
                     "aisle": random.choice(["A1", "A2", "B3", "Furniture"]),
+                    "item_category": random.choice(
+                        ["general", "clothing", "electronics", "designer", "furniture"]
+                    ),
+                    "sort_station": random.choice(["table-1", "table-2", "table-3"]),
+                    "dock_lane": "rear",
                 },
             )
             for event in events:

@@ -19,6 +19,7 @@ from backend.models import (
 )
 
 CONFIG_PATH = Path(__file__).resolve().parents[1] / "config" / "city_thrift_cda.yaml"
+INTAKE_ZONE_IDS = {"receiving_dock", "product_onboarding"}
 
 
 class EventStore:
@@ -119,6 +120,9 @@ class EventStore:
             ),
             employee_alerts_today=sum(
                 1 for a in today_alerts if a.side == MonitorSide.EMPLOYEE
+            ),
+            intake_alerts_today=sum(
+                1 for a in today_alerts if a.zone_id in INTAKE_ZONE_IDS
             ),
             zones_monitored=len(self.get_zones()),
             cameras_online=sum(len(z.cameras) for z in self.get_zones()),

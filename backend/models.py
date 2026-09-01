@@ -81,6 +81,7 @@ class DashboardStats(BaseModel):
     critical_alerts: int
     customer_alerts_today: int
     employee_alerts_today: int
+    intake_alerts_today: int
     zones_monitored: int
     cameras_online: int
 

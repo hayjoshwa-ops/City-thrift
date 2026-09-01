@@ -72,6 +72,7 @@ body {
 .stat-value { font-size: 1.75rem; font-weight: 700; }
 .stat-card.customer .stat-value { color: var(--customer); }
 .stat-card.employee .stat-value { color: var(--employee); }
+.stat-card.intake .stat-value { color: #f4a261; }
 .stat-card.critical .stat-value { color: var(--critical); }
 
 .panels {
@@ -162,6 +163,7 @@ body {
 }
 .side-customer { background: rgba(91, 155, 213, 0.2); color: var(--customer); }
 .side-employee { background: rgba(199, 125, 255, 0.2); color: var(--employee); }
+.side-intake { background: rgba(244, 162, 97, 0.2); color: #f4a261; }
 
 .alert-detail.empty { color: var(--muted); font-size: 0.9rem; }
 .alert-detail .detail-row { margin-bottom: 0.65rem; }

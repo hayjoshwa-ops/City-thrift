@@ -16,12 +16,15 @@ async function loadStore() {
   document.title = `${store.name} — Loss Prevention`;
 }
 
+const INTAKE_ZONES = new Set(["receiving_dock", "product_onboarding"]);
+
 async function loadStats() {
   const stats = await fetchJSON("/stats");
   document.getElementById("stat-critical").textContent = stats.critical_alerts;
   document.getElementById("stat-open").textContent = stats.open_alerts;
   document.getElementById("stat-customer").textContent = stats.customer_alerts_today;
   document.getElementById("stat-employee").textContent = stats.employee_alerts_today;
+  document.getElementById("stat-intake").textContent = stats.intake_alerts_today ?? 0;
   document.getElementById("stat-zones").textContent = stats.zones_monitored;
   document.getElementById("stat-cameras").textContent = stats.cameras_online;
 }
@@ -47,10 +50,11 @@ async function loadAlerts() {
 
 function renderAlerts() {
   const list = document.getElementById("alert-list");
-  const filtered =
-    currentFilter === "all"
-      ? alerts
-      : alerts.filter((a) => a.side === currentFilter);
+  const filtered = alerts.filter((a) => {
+    if (currentFilter === "all") return true;
+    if (currentFilter === "intake") return INTAKE_ZONES.has(a.zone_id);
+    return a.side === currentFilter;
+  });
 
   if (!filtered.length) {
     list.innerHTML = '<li class="empty-state">No alerts yet. Run the demo simulator to generate sample incidents.</li>';
@@ -59,14 +63,19 @@ function renderAlerts() {
 
   list.innerHTML = filtered
     .map(
-      (a) => `
+      (a) => {
+        const isIntake = INTAKE_ZONES.has(a.zone_id);
+        const tagClass = isIntake ? "side-intake" : `side-${a.side}`;
+        const tagLabel = isIntake ? "intake" : a.side;
+        return `
     <li class="alert-item tier-${a.tier} ${a.id === selectedAlertId ? "selected" : ""}" data-id="${a.id}">
       <div class="alert-item-header">
         <span class="alert-title">${a.title}</span>
-        <span class="side-tag side-${a.side}">${a.side}</span>
+        <span class="side-tag ${tagClass}">${tagLabel}</span>
       </div>
       <div class="alert-meta">${a.zone_name} · ${a.tier} · ${formatTime(a.created_at)}</div>
-    </li>`
+    </li>`;
+      }
     )
     .join("");
 

@@ -81,6 +81,36 @@ zones:
       - inventory_to_personal_area
       - buddy_system_violation
 
+  - id: receiving_dock
+    name: Receiving Dock
+    type: employee_only
+    cameras: [cam-12, cam-13]
+    risk_level: critical
+    description: Truck unload and donation intake at rear dock
+    employee_rules:
+      - dock_to_personal_bag
+      - unlogged_intake_removal
+    onboarding_rules:
+      - dock_to_personal_bag
+      - unlogged_intake_removal
+      - intake_truck_unload_oversight
+
+  - id: product_onboarding
+    name: Back Room — Product Onboarding
+    type: employee_only
+    cameras: [cam-14, cam-15]
+    risk_level: critical
+    description: Sort tables where donations are processed and routed to floor or discard
+    employee_rules:
+      - personal_item_selection
+      - intake_to_personal_hold
+    onboarding_rules:
+      - personal_item_selection
+      - intake_to_personal_hold
+      - extended_personal_browsing
+      - onboarding_bypass_sort
+      - high_value_intake_diversion
+
   - id: office_safe
     name: Office / Cash Handling
     type: employee_only
@@ -103,6 +133,9 @@ alert_tiers:
       - concealment_detected
       - pos_void_spike
       - donation_pilferage
+      - personal_item_selection
+      - intake_to_personal_hold
+      - dock_to_personal_bag
   medium:
     response: daily_review
     examples:
@@ -122,6 +155,26 @@ pos_integration:
     - discount_over_percent: 50
     - refund_without_return
     - no_sale_opens_per_shift: 3
+
+intake_policy:
+  description: >
+    Employees may not remove intake items for personal use beyond what the store
+    needs for inventory. All items must follow dock → sort → floor/discard path.
+  personal_hold_allowed: false
+  manager_approval_required_for_employee_purchase: true
+  high_value_categories:
+    - electronics
+    - designer
+    - furniture
+  monitored_stages:
+    - truck_unload
+    - dock_intake
+    - sort_table
+    - quality_check
+  personal_hold_zones:
+    - locker_area
+    - employee_exit_path
+    - under_sort_table
 
 privacy:
   face_recognition: false

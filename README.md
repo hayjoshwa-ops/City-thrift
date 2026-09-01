@@ -17,6 +17,14 @@ AI-integrated security monitoring for **loss prevention** at **City Thrift**, 16
 - Back-of-house inventory movement toward personal areas
 - Solo cash handling violations
 - Unsorted donation removal before intake processing
+- **Back room & dock onboarding** — personal item selection during intake, items diverted to personal hold, unlogged removals from dock/sort
+
+### Intake / dock monitoring
+When donations and product arrive at the rear dock and back room sort tables, the system watches employees for:
+- Keeping intake items for personal use beyond what the store needs
+- Diverting items from truck unload to personal bag or locker
+- Extended browsing/sorting behavior indicating personal selection
+- High-value items (electronics, designer, furniture) removed from inventory path
 
 ## Quick start
 
@@ -61,6 +69,7 @@ python scripts/demo_simulator.py
 2. **Phase 2**: Entrance/exit + donation drop-off (Mon–Sat 10–6, Sun 11–6)
 3. **Phase 3**: Full sales floor analytics
 4. **Phase 4**: Back-of-house employee zones
+5. **Phase 5**: Receiving dock + product onboarding (personal intake selection)
 
 Replace demo detectors in `ai_engine/detectors/` with production models (YOLO + pose, POS webhooks). Behavior-only detection — no facial recognition.
 
