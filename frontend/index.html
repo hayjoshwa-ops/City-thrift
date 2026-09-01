@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>City Thrift CDA — Loss Prevention</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="brand">
+      <h1>City Thrift — Loss Prevention</h1>
+      <p class="subtitle">Coeur d'Alene, ID · AI Security Monitoring</p>
+    </div>
+    <div class="header-meta">
+      <span id="connection-status" class="badge badge-ok">Live</span>
+      <span id="store-phone"></span>
+    </div>
+  </header>
+
+  <div id="demo-banner" class="demo-banner hidden">
+    <strong>Demo mode</strong> — cameras and POS are not connected yet.
+    Alerts shown are simulated for training. See <code>docs/BEFORE_YOU_CONNECT.md</code> when you are ready to go live.
+  </div>
+
+  <main class="layout">
+    <section class="stats-grid" id="stats-grid">
+      <div class="stat-card critical">
+        <span class="stat-label">Critical Open</span>
+        <span class="stat-value" id="stat-critical">—</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Open Alerts</span>
+        <span class="stat-value" id="stat-open">—</span>
+      </div>
+      <div class="stat-card customer">
+        <span class="stat-label">Customer Today</span>
+        <span class="stat-value" id="stat-customer">—</span>
+      </div>
+      <div class="stat-card employee">
+        <span class="stat-label">Employee Today</span>
+        <span class="stat-value" id="stat-employee">—</span>
+      </div>
+      <div class="stat-card intake">
+        <span class="stat-label">Intake / Dock Today</span>
+        <span class="stat-value" id="stat-intake">—</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Zones</span>
+        <span class="stat-value" id="stat-zones">—</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Cameras</span>
+        <span class="stat-value" id="stat-cameras">—</span>
+      </div>
+    </section>
+
+    <section class="panels">
+      <div class="panel alerts-panel">
+        <div class="panel-header">
+          <h2>Active Alerts</h2>
+          <div class="filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="customer">Customer</button>
+            <button class="filter-btn" data-filter="employee">Employee</button>
+            <button class="filter-btn" data-filter="intake">Intake / Dock</button>
+          </div>
+        </div>
+        <ul id="alert-list" class="alert-list"></ul>
+      </div>
+
+      <div class="panel detail-panel">
+        <h2>Alert Detail</h2>
+        <div id="alert-detail" class="alert-detail empty">
+          <p>Select an alert to review incident details, zone, and recommended response.</p>
+        </div>
+
+        <h2 class="zones-heading">Monitored Zones</h2>
+        <ul id="zone-list" class="zone-list"></ul>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
