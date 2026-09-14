@@ -561,13 +561,16 @@ p {
 }
 
 .chip {
+  position: relative;
+  z-index: 1;
   border: 1.5px solid color-mix(in srgb, var(--forest) 16%, transparent);
-  background: rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.92);
   color: var(--forest);
   border-radius: 999px;
-  padding: 0.55rem 1rem;
+  padding: 0.7rem 1.15rem;
   font-weight: 700;
   cursor: pointer;
+  pointer-events: auto;
   transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
